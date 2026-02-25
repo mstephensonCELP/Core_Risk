@@ -1,0 +1,737 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cummings Electrical — Contract Risk Brief</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@400;500&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,300&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --crwv-red: #C0392B;
+    --crwv-red-dim: #7a2218;
+    --crwv-bg: #1a0d0b;
+    --crwv-accent: #FF6B4A;
+    --crwv-line: rgba(255,107,74,0.25);
+
+    --corz-amber: #D48B00;
+    --corz-amber-dim: #8a5900;
+    --corz-bg: #0f0e09;
+    --corz-accent: #F0C040;
+    --corz-line: rgba(240,192,64,0.25);
+
+    --white: #F5F0EB;
+    --muted: rgba(245,240,235,0.45);
+    --divider: rgba(245,240,235,0.08);
+  }
+
+  html, body {
+    width: 100%;
+    height: 100%;
+    background: #111;
+  }
+
+  .page {
+    width: 1100px;
+    min-height: 780px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    font-family: 'DM Sans', sans-serif;
+    overflow: hidden;
+    position: relative;
+  }
+
+  /* ─── MASTHEAD ─────────────────────────────── */
+  .masthead {
+    background: #0b0b0b;
+    border-bottom: 1px solid var(--divider);
+    padding: 14px 32px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .masthead-left {
+    display: flex;
+    align-items: baseline;
+    gap: 14px;
+  }
+
+  .brand {
+    font-family: 'DM Serif Display', serif;
+    font-size: 18px;
+    color: var(--white);
+    letter-spacing: 0.01em;
+  }
+
+  .brand span {
+    color: #888;
+    font-size: 13px;
+    font-family: 'DM Mono', monospace;
+    font-weight: 400;
+    letter-spacing: 0.05em;
+  }
+
+  .masthead-right {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--muted);
+    text-align: right;
+    line-height: 1.6;
+  }
+
+  .masthead-right strong {
+    color: var(--white);
+    font-weight: 500;
+  }
+
+  /* ─── PANELS ────────────────────────────────── */
+  .panel {
+    flex: 1;
+    display: grid;
+    grid-template-columns: 220px 1fr 1fr;
+    grid-template-rows: auto 1fr auto;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .panel-crwv { background: var(--crwv-bg); }
+  .panel-corz { background: var(--corz-bg); border-top: 1px solid var(--divider); }
+
+  /* noise texture overlay */
+  .panel::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+    opacity: 0.4;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .panel > * { position: relative; z-index: 1; }
+
+  /* ─── TICKER COLUMN ─────────────────────────── */
+  .ticker-col {
+    padding: 22px 20px 22px 28px;
+    border-right: 1px solid var(--divider);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 12px;
+  }
+
+  .ticker-top {}
+
+  .ticker-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+
+  .panel-crwv .ticker-label { color: var(--crwv-accent); }
+  .panel-corz .ticker-label { color: var(--corz-accent); }
+
+  .ticker-name {
+    font-family: 'DM Serif Display', serif;
+    font-size: 28px;
+    color: var(--white);
+    line-height: 1.05;
+    margin-bottom: 2px;
+  }
+
+  .ticker-sub {
+    font-size: 11px;
+    color: var(--muted);
+    font-weight: 300;
+    line-height: 1.4;
+  }
+
+  .risk-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 5px 10px;
+    border-radius: 3px;
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-top: 10px;
+    width: fit-content;
+  }
+
+  .badge-critical {
+    background: rgba(192,57,43,0.18);
+    border: 1px solid var(--crwv-red);
+    color: #FF8066;
+  }
+
+  .badge-moderate {
+    background: rgba(212,139,0,0.18);
+    border: 1px solid var(--corz-amber);
+    color: #F0C040;
+  }
+
+  .badge-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    animation: pulse 2s ease-in-out infinite;
+  }
+
+  .badge-critical .badge-dot { background: #FF6B4A; }
+  .badge-moderate .badge-dot { background: var(--corz-accent); }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.5; transform: scale(0.7); }
+  }
+
+  .meta-block {
+    margin-top: auto;
+  }
+
+  .meta-item {
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+    margin-bottom: 8px;
+  }
+
+  .meta-key {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--muted);
+  }
+
+  .meta-val {
+    font-size: 12px;
+    color: var(--white);
+    font-weight: 500;
+  }
+
+  /* ─── HEADLINES COLUMN ──────────────────────── */
+  .headlines-col {
+    padding: 22px 18px 22px 22px;
+    border-right: 1px solid var(--divider);
+    overflow: hidden;
+  }
+
+  .col-header {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    margin-bottom: 14px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--divider);
+  }
+
+  .panel-crwv .col-header { color: var(--crwv-accent); border-color: var(--crwv-line); }
+  .panel-corz .col-header { color: var(--corz-accent); border-color: var(--corz-line); }
+
+  .headline-item {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 11px;
+    padding-bottom: 11px;
+    border-bottom: 1px solid var(--divider);
+    align-items: flex-start;
+  }
+
+  .headline-item:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+  }
+
+  .hl-icon {
+    font-size: 14px;
+    flex-shrink: 0;
+    margin-top: 1px;
+    line-height: 1;
+  }
+
+  .hl-text {
+    flex: 1;
+  }
+
+  .hl-tag {
+    font-family: 'DM Mono', monospace;
+    font-size: 8.5px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 2px;
+  }
+
+  .panel-crwv .hl-tag { color: var(--crwv-accent); }
+  .panel-corz .hl-tag { color: var(--corz-accent); }
+
+  .hl-title {
+    font-size: 11.5px;
+    color: var(--white);
+    line-height: 1.4;
+    font-weight: 500;
+  }
+
+  .hl-detail {
+    font-size: 10.5px;
+    color: var(--muted);
+    line-height: 1.4;
+    margin-top: 2px;
+    font-weight: 300;
+  }
+
+  /* ─── SUMMARY + ACTION COLUMN ───────────────── */
+  .summary-col {
+    padding: 22px 24px 22px 20px;
+  }
+
+  .summary-block {
+    margin-bottom: 18px;
+  }
+
+  .summary-text {
+    font-size: 12px;
+    color: rgba(245,240,235,0.75);
+    line-height: 1.65;
+    font-weight: 300;
+  }
+
+  .summary-text strong {
+    color: var(--white);
+    font-weight: 500;
+  }
+
+  .action-block {
+    padding: 14px 16px;
+    border-radius: 4px;
+    margin-top: auto;
+  }
+
+  .panel-crwv .action-block {
+    background: rgba(192,57,43,0.12);
+    border: 1px solid rgba(192,57,43,0.35);
+    border-left: 3px solid var(--crwv-red);
+  }
+
+  .panel-corz .action-block {
+    background: rgba(212,139,0,0.10);
+    border: 1px solid rgba(212,139,0,0.30);
+    border-left: 3px solid var(--corz-amber);
+  }
+
+  .action-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    margin-bottom: 7px;
+  }
+
+  .panel-crwv .action-label { color: var(--crwv-accent); }
+  .panel-corz .action-label { color: var(--corz-accent); }
+
+  .action-text {
+    font-size: 11.5px;
+    color: var(--white);
+    line-height: 1.6;
+    font-weight: 400;
+  }
+
+  /* ─── DIVIDER ───────────────────────────────── */
+  .panel-divider {
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(245,240,235,0.12) 20%, rgba(245,240,235,0.12) 80%, transparent);
+    position: relative;
+  }
+
+  /* ─── NEXT TRIGGERS BAR ─────────────────────── */
+  .triggers-bar {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    border-top: 1px solid var(--divider);
+  }
+
+  .trigger-panel {
+    padding: 12px 24px 12px 28px;
+    display: flex;
+    align-items: center;
+    gap: 18px;
+  }
+
+  .trigger-panel-crwv {
+    background: rgba(192,57,43,0.13);
+    border-right: 1px solid var(--divider);
+    border-top: 2px solid var(--crwv-red);
+  }
+
+  .trigger-panel-corz {
+    background: rgba(212,139,0,0.10);
+    border-top: 2px solid var(--corz-amber);
+  }
+
+  .trigger-icon {
+    font-size: 22px;
+    flex-shrink: 0;
+  }
+
+  .trigger-body {
+    flex: 1;
+  }
+
+  .trigger-eyebrow {
+    font-family: 'DM Mono', monospace;
+    font-size: 8.5px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    margin-bottom: 3px;
+  }
+
+  .trigger-panel-crwv .trigger-eyebrow { color: var(--crwv-accent); }
+  .trigger-panel-corz .trigger-eyebrow { color: var(--corz-accent); }
+
+  .trigger-headline {
+    font-family: 'DM Serif Display', serif;
+    font-size: 14px;
+    color: var(--white);
+    line-height: 1.2;
+    margin-bottom: 3px;
+  }
+
+  .trigger-detail {
+    font-size: 10.5px;
+    color: var(--muted);
+    font-weight: 300;
+    line-height: 1.4;
+  }
+
+  .trigger-detail strong {
+    color: var(--white);
+    font-weight: 500;
+  }
+
+  .trigger-date-pill {
+    flex-shrink: 0;
+    text-align: center;
+    padding: 8px 14px;
+    border-radius: 4px;
+  }
+
+  .trigger-panel-crwv .trigger-date-pill {
+    background: rgba(192,57,43,0.25);
+    border: 1px solid rgba(255,107,74,0.4);
+  }
+
+  .trigger-panel-corz .trigger-date-pill {
+    background: rgba(212,139,0,0.2);
+    border: 1px solid rgba(240,192,64,0.4);
+  }
+
+  .trigger-date-day {
+    font-family: 'DM Serif Display', serif;
+    font-size: 22px;
+    line-height: 1;
+    margin-bottom: 1px;
+  }
+
+  .trigger-panel-crwv .trigger-date-day { color: #FF8066; }
+  .trigger-panel-corz .trigger-date-day { color: var(--corz-accent); }
+
+  .trigger-date-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 8.5px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  /* ─── FOOTER ────────────────────────────────── */
+  .footer {
+    background: #0b0b0b;
+    border-top: 1px solid var(--divider);
+    padding: 8px 32px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .footer-note {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    color: rgba(245,240,235,0.3);
+    letter-spacing: 0.06em;
+  }
+
+  .trigger-pill {
+    background: rgba(192,57,43,0.15);
+    border: 1px solid rgba(192,57,43,0.4);
+    border-radius: 2px;
+    padding: 3px 10px;
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    color: #FF8066;
+    letter-spacing: 0.08em;
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <!-- MASTHEAD -->
+  <div class="masthead">
+    <div class="masthead-left">
+      <div class="brand">Cummings Electrical<span> / CONTRACT RISK BRIEF</span></div>
+    </div>
+    <div class="masthead-right">
+      <strong>INTERNAL USE ONLY</strong><br>
+      Issued: Feb 24, 2026 &nbsp;·&nbsp; Sources current as of Feb 23, 2026
+    </div>
+  </div>
+
+  <!-- ═══════════════ COREWEAVE PANEL ═══════════════ -->
+  <div class="panel panel-crwv">
+
+    <!-- Ticker Column -->
+    <div class="ticker-col">
+      <div class="ticker-top">
+        <div class="ticker-label">NASDAQ: CRWV</div>
+        <div class="ticker-name">Core&shy;Weave</div>
+        <div class="ticker-sub">AI Cloud Infrastructure<br>Livingston, NJ</div>
+        <div class="risk-badge badge-critical">
+          <span class="badge-dot"></span> Critical Watch
+        </div>
+      </div>
+      <div class="meta-block">
+        <div class="meta-item">
+          <span class="meta-key">Credit Rating</span>
+          <span class="meta-val">B+ (S&P) · Ba3 (Moody's)</span>
+        </div>
+        <div class="meta-item">
+          <span class="meta-key">Total Debt</span>
+          <span class="meta-val">$18.8B</span>
+        </div>
+        <div class="meta-item">
+          <span class="meta-key">Stock (Feb 23)</span>
+          <span class="meta-val">$89.15 &nbsp;▼12% / week</span>
+        </div>
+        <div class="meta-item">
+          <span class="meta-key">Q4 Earnings</span>
+          <span class="meta-val">Feb 26 after close</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Headlines Column -->
+    <div class="headlines-col">
+      <div class="col-header">↑ Key Headlines — Last 30 Days</div>
+
+      <div class="headline-item">
+        <div class="hl-icon">🚫</div>
+        <div class="hl-text">
+          <div class="hl-tag">Financing Failure</div>
+          <div class="hl-title">Blue Owl fails to raise $4B for Lancaster, PA data center</div>
+          <div class="hl-detail">A lender cited CoreWeave's creditworthiness as the reason for passing — stock dropped 12% on the news.</div>
+        </div>
+      </div>
+
+      <div class="headline-item">
+        <div class="hl-icon">⏳</div>
+        <div class="hl-text">
+          <div class="hl-tag">Debt Pressure</div>
+          <div class="hl-title">$4.2B "GPU Debt Wall" — repayments now active in 2026</div>
+          <div class="hl-detail">Loan tranches are amortizing now; collateral (GPUs) has lost 50–70% rental value since loans were originated.</div>
+        </div>
+      </div>
+
+      <div class="headline-item">
+        <div class="hl-icon">📉</div>
+        <div class="hl-text">
+          <div class="hl-tag">Covenant Amendment</div>
+          <div class="hl-title">Cash floor quietly cut to $100M for March–April 2026</div>
+          <div class="hl-detail">CoreWeave amended its DDTL 3.0 loan to reduce required liquidity — signal of tight cash management heading into earnings.</div>
+        </div>
+      </div>
+
+      <div class="headline-item">
+        <div class="hl-icon">⚖️</div>
+        <div class="hl-text">
+          <div class="hl-tag">Legal Risk</div>
+          <div class="hl-title">Securities class action filed over concealed data center delays</div>
+          <div class="hl-detail">Shareholders allege CoreWeave hid Denton, TX construction delays during IPO roadshow. Lead plaintiff deadline March 13, 2026.</div>
+        </div>
+      </div>
+
+      <div class="headline-item">
+        <div class="hl-icon">🔔</div>
+        <div class="hl-text">
+          <div class="hl-tag">Insider Activity</div>
+          <div class="hl-title">CEO sold $7.7M in stock on Feb 11, weeks before earnings</div>
+          <div class="hl-detail">Michael Intrator sold 32,455 shares ahead of the Feb 26 earnings report — a yellow flag in already volatile conditions.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Summary + Action Column -->
+    <div class="summary-col">
+      <div class="col-header">What This Means for Cummings</div>
+      <div class="summary-block">
+        <div class="summary-text">
+          CoreWeave is showing multiple simultaneous stress signals right now. <strong>A major third-party lender just refused to finance a CoreWeave-backed project</strong> because of credit concerns — that's not speculation, it's the market telling you something. On top of that, the company is actively managing a $4.2 billion debt repayment cycle while its collateral (GPU hardware) is worth half what it was when the loans were made. The covenant amendment — cutting their required cash cushion to just $100M — means lenders are already giving them workout provisions. With Q4 earnings due Thursday and the stock pricing in an 18% swing, <strong>any guidance cut could trigger a cascade</strong>: tighter credit, slower draws on financing, and delayed payments to subcontractors like Cummings. Construction-related litigation adds another layer of distraction and liability for their project execution team.
+        </div>
+      </div>
+      <div class="action-block">
+        <div class="action-label">⚡ Recommended Action</div>
+        <div class="action-text">Escalate AR monitoring to weekly review and enforce Net 15 strictly — no exceptions. Confirm all lien rights are current and filed on active projects. <strong>Watch Feb 26 earnings closely</strong>: any guidance cut or new delay disclosure should trigger immediate preliminary lien notices on all open invoices.</div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="panel-divider"></div>
+
+  <!-- ═══════════════ CORE SCIENTIFIC PANEL ═══════════════ -->
+  <div class="panel panel-corz">
+
+    <!-- Ticker Column -->
+    <div class="ticker-col">
+      <div class="ticker-top">
+        <div class="ticker-label">NASDAQ: CORZ</div>
+        <div class="ticker-name">Core Scientific</div>
+        <div class="ticker-sub">Digital Infrastructure<br>Austin, TX</div>
+        <div class="risk-badge badge-moderate">
+          <span class="badge-dot"></span> Moderate-High
+        </div>
+      </div>
+      <div class="meta-block">
+        <div class="meta-item">
+          <span class="meta-key">Prior Bankruptcy</span>
+          <span class="meta-val">Filed Dec 2022 · Emerged Jan 2024</span>
+        </div>
+        <div class="meta-item">
+          <span class="meta-key">Revenue Dependency</span>
+          <span class="meta-val">90%+ on CoreWeave</span>
+        </div>
+        <div class="meta-item">
+          <span class="meta-key">Stock (Feb 22)</span>
+          <span class="meta-val">$17.25 &nbsp;▲45% / year</span>
+        </div>
+        <div class="meta-item">
+          <span class="meta-key">Q4 Earnings</span>
+          <span class="meta-val">March 2 after close</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Headlines Column -->
+    <div class="headlines-col">
+      <div class="col-header">↑ Key Headlines — Last 30 Days</div>
+
+      <div class="headline-item">
+        <div class="hl-icon">🏛️</div>
+        <div class="hl-text">
+          <div class="hl-tag">Board Instability</div>
+          <div class="hl-title">Chairman exits; activist investor forces three-director board overhaul</div>
+          <div class="hl-detail">Chairman Jordan Levy won't stand for re-election; Two Seas Capital (8.1% stake) reached a cooperation agreement requiring new independent directors by March 15.</div>
+        </div>
+      </div>
+
+      <div class="headline-item">
+        <div class="hl-icon">🔗</div>
+        <div class="hl-text">
+          <div class="hl-tag">Interdependence Risk</div>
+          <div class="hl-title">CoreWeave merger rejected Oct 2025 — CORZ now stands alone, still dependent</div>
+          <div class="hl-detail">Stockholders voted down CoreWeave's all-stock acquisition offer. CORZ remains independent but still relies on CoreWeave for 90%+ of revenue — no deal, no diversification.</div>
+        </div>
+      </div>
+
+      <div class="headline-item">
+        <div class="hl-icon">📅</div>
+        <div class="hl-text">
+          <div class="hl-tag">Earnings Watch</div>
+          <div class="hl-title">Full-year 2025 results and 2026 outlook due March 2</div>
+          <div class="hl-detail">First full-year report since the failed merger — will reveal how fast Bitcoin mining revenue is declining vs. AI colocation ramping. Market expects ±16% stock swing.</div>
+        </div>
+      </div>
+
+      <div class="headline-item">
+        <div class="hl-icon">💰</div>
+        <div class="hl-text">
+          <div class="hl-tag">Institutional Signal</div>
+          <div class="hl-title">New $38.5M institutional stake disclosed mid-February</div>
+          <div class="hl-detail">A fresh large position signals some market confidence in the AI pivot, and the stock is up ~45% over the past year despite negative FCF and an ongoing cash burn.</div>
+        </div>
+      </div>
+
+      <div class="headline-item">
+        <div class="hl-icon">⚠️</div>
+        <div class="hl-text">
+          <div class="hl-tag">Cash Flow</div>
+          <div class="hl-title">Q3 2025: $244.5M capex, $196M of it funded directly by CoreWeave</div>
+          <div class="hl-detail">Core Scientific's own construction spending is majority-funded by its anchor tenant — if CoreWeave slows payments or pulls back, CORZ's build-out and cash position deteriorate fast.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Summary + Action Column -->
+    <div class="summary-col">
+      <div class="col-header">What This Means for Cummings</div>
+      <div class="summary-block">
+        <div class="summary-text">
+          Core Scientific is a pass-through risk. <strong>Whatever happens to CoreWeave flows directly here.</strong> In Q3, 80% of CORZ's entire capital expenditure was funded by CoreWeave — meaning if CoreWeave tightens up or misses payments to Core Scientific, Core Scientific cannot fund its own construction commitments. The rejected merger leaves CORZ standing alone with no diversification and no strategic acquirer backstop. The board transition — with the Chairman exiting and an activist investor now controlling director nominations — introduces leadership uncertainty at exactly the wrong time. On the positive side, the company holds real assets (owns its data centers), has cash on hand (~$453M as of Q3), and the stock performance suggests the market believes the AI colocation pivot will work. <strong>The risk is not imminent default — it's contagion from CoreWeave distress.</strong>
+        </div>
+      </div>
+      <div class="action-block">
+        <div class="action-label">⚡ Recommended Action</div>
+        <div class="action-text">Maintain current protective measures (milestone billing, Net 15–30, lien rights active). <strong>Treat CoreWeave's Feb 26 earnings as the trigger event for CORZ too</strong> — any CoreWeave distress signal should immediately prompt tighter AR follow-up and lien notice review on all Core Scientific projects. Watch March 2 earnings for cash burn acceleration.</div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- NEXT TRIGGERS BAR -->
+  <div class="triggers-bar">
+
+    <div class="trigger-panel trigger-panel-crwv">
+      <div class="trigger-date-pill">
+        <div class="trigger-date-day">FEB<br>26</div>
+        <div class="trigger-date-label">After Close</div>
+      </div>
+      <div class="trigger-body">
+        <div class="trigger-eyebrow">⚡ Next Trigger — CoreWeave</div>
+        <div class="trigger-headline">Q4 2025 Earnings Report</div>
+        <div class="trigger-detail">Watch for guidance cut, new delay disclosures, or cash commentary. <strong>Any negative signal → file preliminary lien notices immediately</strong> on all open CRWV invoices.</div>
+      </div>
+    </div>
+
+    <div class="trigger-panel trigger-panel-corz">
+      <div class="trigger-date-pill">
+        <div class="trigger-date-day">MAR<br>2</div>
+        <div class="trigger-date-label">After Close</div>
+      </div>
+      <div class="trigger-body">
+        <div class="trigger-eyebrow">⚡ Next Trigger — Core Scientific</div>
+        <div class="trigger-headline">Q4 Full-Year 2025 Earnings</div>
+        <div class="trigger-detail">First full-year post-merger-rejection report. Watch cash burn rate and colocation revenue ramp. <strong>If CoreWeave (Feb 26) disappoints, escalate CORZ AR before March 2.</strong></div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- FOOTER -->
+  <div class="footer">
+    <div class="footer-note">FOR INTERNAL CONTRACT MANAGEMENT USE ONLY · NOT INVESTMENT ADVICE · CUMMINGS ELECTRICAL</div>
+    <div class="footer-note" style="color:rgba(245,240,235,0.18);">Sources current as of Feb 23, 2026</div>
+  </div>
+
+</div>
+</body>
+</html>
